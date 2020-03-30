@@ -77,24 +77,24 @@ def load_lines(d_path, f_name, dic, configs, train=False):
     f_path = d_path + f_name
     with open(f_path, "r",encoding='utf-8') as f:
         reader = csv.reader(f, delimiter="\t", quotechar=None)
-	for line in reader:
-	    uid, q, r = line[0],line[1], line[2]
-	    xy = get_xy_tuple(q.strip(), r.strip(), dic, configs, train)
-	    if xy is not None:
-		lines.append(xy)
+    for line in reader:
+        uid, q, r = line[0],line[1], line[2]
+        xy = get_xy_tuple(q.strip(), r.strip(), dic, configs, train)
+        if xy is not None:
+            lines.append(xy)
     return lines
-
+"""
 def load_dict(d_path, f_name, dic):
     f_path = d_path + f_name
     f = open(f_path, "r")
     for line in f:
-	line = line.strip('\n').strip('\r')
+        line = line.strip('\n').strip('\r')
 	if line:
 	    tf = line.split("\t")
 	    dic[tf[0]] = int(tf[1])
     return dic
-
-
+"""
+"""
 def to_dict(xys, dic):
     # dict should not consider test set!!!!!
     for xy in xys:
@@ -113,7 +113,7 @@ def to_dict(xys, dic):
 	    else:
 		dic[w] = 1
     return dic
-
+"""
 
 def del_num(s):
     return re.sub(r"(\b|\s+\-?|^\-?)(\d+|\d*\.\d+)\b","#", s)
@@ -121,23 +121,23 @@ def del_num(s):
 def split_chi(s):
     words = []
     for e in s:
-	words += [e]
+        words += [e]
     return words
 
 def read_q(q, dic, cfg, train):
     lines = []
     words = split_chi(q)
     if train:
-	for w in words:
-	    if w in dic:
-		dic[w] += 1
-	    else:
-		dic[w] = 1
+        for w in words:
+            if w in dic:
+                dic[w] += 1
+            else:
+                dic[w] = 1
     num_words = len(words)
     if num_words >= cfg.MIN_LEN_X and num_words < cfg.MAX_LEN_X:
-	lines += words
+        lines += words
     elif num_words >= cfg.MAX_LEN_X:
-	lines += words[0:cfg.MAX_LEN_X]
+        lines += words[0:cfg.MAX_LEN_X]
     lines += [cfg.W_EOS]
     return (lines, q) if len(lines) >= cfg.MIN_LEN_X and len(lines) <= cfg.MAX_LEN_X + 1 else None
 
@@ -145,19 +145,18 @@ def read_r(r, dic, cfg, train):
     lines = []
     words = split_chi(r)
     if train:
-	for w in words:
-	    if w in dic:
-		dic[w] += 1
-	    else:
-		dic[w] = 1
+        for w in words:
+            if w in dic:
+                dic[w] += 1
+            else:
+                dic[w] = 1
 
     num_words = len(words)
     if num_words >= cfg.MIN_LEN_Y and num_words <= cfg.MAX_LEN_Y:
-	lines += words
-	lines += [cfg.W_EOS]
+        lines += words
+        lines += [cfg.W_EOS]
     elif num_words > cfg.MAX_LEN_Y: # do not know if should be stoped
-	lines = words[0 : cfg.MAX_LEN_Y + 1] # one more word.
-    
+        lines = words[0 : cfg.MAX_LEN_Y + 1] # one more word.
     return (lines, r) if len(lines) >= cfg.MIN_LEN_Y and len(lines) <= cfg.MAX_LEN_Y + 1  else None
 
 def prepare_data(d_path):
@@ -181,26 +180,25 @@ def prepare_data(d_path):
     print("tmp: " + TMP_PATH)
 
     if not exists(TRAINING_PATH):
-	makedirs(TRAINING_PATH)
+        makedirs(TRAINING_PATH)
     if not exists(VALIDATE_PATH):
-	makedirs(VALIDATE_PATH)
+        makedirs(VALIDATE_PATH)
     if not exists(TESTING_PATH):
-	makedirs(TESTING_PATH)
+        makedirs(TESTING_PATH)
     if not exists(RESULT_PATH):
-	makedirs(RESULT_PATH)
+        makedirs(RESULT_PATH)
     if not exists(MODEL_PATH):
-	makedirs(MODEL_PATH)
+        makedirs(MODEL_PATH)
     if not exists(BEAM_SUMM_PATH):
-	makedirs(BEAM_SUMM_PATH)
+        makedirs(BEAM_SUMM_PATH)
     if not exists(BEAM_GT_PATH):
-	makedirs(BEAM_GT_PATH)
+        makedirs(BEAM_GT_PATH)
     if not exists(GROUND_TRUTH_PATH):
-	makedirs(GROUND_TRUTH_PATH)
+        makedirs(GROUND_TRUTH_PATH)
     if not exists(SUMM_PATH):
-	makedirs(SUMM_PATH)
+        makedirs(SUMM_PATH)
     if not exists(TMP_PATH):
-	makedirs(TMP_PATH)
-	
+        makedirs(TMP_PATH)
     all_dic = {}
     #build_dict(d_path, "train.txt", configs)
     #all_dic = load_dict(d_path, "vocab.txt", all_dic)
@@ -256,7 +254,7 @@ def prepare_data(d_path):
     #print("#train = ", len(train_xy_list))
     #print("#test = ", len(test_xy_list))
     print("#validate = ", len(valid_xy_list))
-	
+
     #print("#all_dic = ", len(all_dic), ", #dic = ", len(dic), ", #hfw = ", len(hfw))
 
     print("dump test...")
